@@ -19,12 +19,7 @@ function setup() {
   background(59, 59, 59);
   noStroke();
   textFont(myFont1);
-  textSize(70)
-  fill(235, 192, 52);
-  text('Black Lives Matter', 40, 100);
-
-  textSize(30)
-  text('Enable mic and click mouse to begin recording', 40, 180);
+ 
   //createA('collective.html', 'collective');
 
   // create an audio in
@@ -47,10 +42,24 @@ function setup() {
   
 }  
 
+function displayText() {
+  textSize(70)
+  fill(235, 192, 52);
+  text('Black Lives Matter', 40, 100);
+
+  textSize(30)
+  text('Enable mic and click mouse to begin recording', 40, 180);
+}
+
+
 function draw() { 
- //clear()
- //background(59, 59, 59);
- /*
+  //background(59, 59, 59);
+
+  clear();
+  displayText();
+
+ 
+ 
   var vol = mic.getLevel();
   sum_vol += vol;
   if(frameCount%10==0) {
@@ -61,7 +70,7 @@ function draw() {
 	audio.push(w);
   ellipse(width*.5, height*.5, w+22, w+22);
   
-  */
+
 
 }
 
