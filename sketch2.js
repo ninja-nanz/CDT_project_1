@@ -1,10 +1,13 @@
-let myFont1, myFont2;
+let headerFont, myFont1, myFont2, myFont3, myFont4;
 var input;
 let button;
 let names = [];
 function preload() {
-  myFont1 = loadFont('/resources/BebasNeue-Regular.ttf');
-  myFont2 = loadFont('/resources/Doctor_Glitch.otf')
+  headerFont = loadFont('/resources/BebasNeue-Regular.ttf');
+  myFont1 = loadFont('/resources/CircularStd-Book.otf');
+  myFont2 = loadFont('/resources/Courier.dfont');
+  myFont3 = loadFont('/resources/Karla-Bold.ttf');
+  myFont4 = loadFont('/resources/Rubik-Regular.ttf');
 }
 
 function setup() {
@@ -27,13 +30,15 @@ function newName() {
     constructor(name) {
       this.x = random(width);
       this.y = random(400, height);
-      this.speed = 1;
+      this.speed = random(1, 4);
       this.name = name;
+      this.font = random([myFont1,myFont3,myFont4]);
     }
   
     move() {
-      this.x ++;
+      this.x += this.speed;
       this.y = this.y;
+
       
       if (this.x > width) {
       this.x = 0;
@@ -43,7 +48,7 @@ function newName() {
   
     display() {
       fill(235, 192, 52);
-      textFont(myFont1);
+      textFont(this.font);
       textSize(50);
       text(this.name, this.x, this.y);
     }
@@ -51,10 +56,11 @@ function newName() {
 
 function draw() {
     background(59, 59, 59);
-    textFont(myFont1);
+    textFont(headerFont);
     textSize(70)
     fill(235, 192, 52);
     text('Black Lives Matter', windowWidth/2, 100);
+    textSize(30)
     text("Enter your name", 50, 230);
     for (let i = 0; i < names.length; i++) {
       names[i].move();
