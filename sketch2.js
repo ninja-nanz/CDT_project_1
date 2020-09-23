@@ -7,6 +7,7 @@ let buttonPlay;
 let buttonStop;
 let col1, col2, col3;
 let mic, recorder, soundFile;
+let counter = 0;
 var input;
 function preload() {
   headerFont = loadFont('/resources/BebasNeue-Regular.ttf');
@@ -74,6 +75,7 @@ function playAudio() {
 function newName() {
     fill(255,255,255)
     names.push(new Name(name=input.value()));
+    counter ++;
     //console.log(names)
   } 
   
@@ -114,6 +116,9 @@ function draw() {
     text('Black Lives Matter', (windowWidth/2)-150, 100);
     textSize(30)
     text("Enter your name", 50, 200);
+    fill(255, 255, 255, 80);
+    textSize(20)
+    text(counter + " voices", width-200, 200);
 
     for (let i = 0; i < names.length; i++) {
       names[i].move();
