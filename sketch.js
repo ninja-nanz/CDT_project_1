@@ -49,6 +49,10 @@ function displayText() {
 
   textSize(30)
   text('Enable mic and click mouse to begin recording', 40, 180);
+  button = createButton('Add to collective');
+  button.position(40, 200);
+  button.mousePressed(openCollective)
+  
 }
 
 

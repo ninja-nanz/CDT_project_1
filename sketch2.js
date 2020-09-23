@@ -5,7 +5,7 @@ let names = [];
 function preload() {
   headerFont = loadFont('/resources/BebasNeue-Regular.ttf');
   myFont1 = loadFont('/resources/CircularStd-Book.otf');
-  myFont2 = loadFont('/resources/Courier.dfont');
+  //myFont2 = loadFont('/resources/Courier.dfont');
   myFont3 = loadFont('/resources/Karla-Bold.ttf');
   myFont4 = loadFont('/resources/Rubik-Regular.ttf');
 }
@@ -30,7 +30,7 @@ function newName() {
     constructor(name) {
       this.x = random(width);
       this.y = random(400, height);
-      this.speed = random(1, 4);
+      this.speed = random(.5, 2);
       this.name = name;
       this.font = random([myFont1,myFont3,myFont4]);
     }
@@ -49,7 +49,7 @@ function newName() {
     display() {
       fill(235, 192, 52);
       textFont(this.font);
-      textSize(50);
+      textSize(30);
       text(this.name, this.x, this.y);
     }
 }
