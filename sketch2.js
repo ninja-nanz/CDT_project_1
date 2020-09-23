@@ -40,6 +40,7 @@ function setup() {
   buttonPlay.style('background-color', col2);
   buttonPlay.position(50, 110);
   buttonPlay.mousePressed(playAudio);
+  fft = new p5.FFT();
 
   // create an audio in
   mic = new p5.AudioIn();
@@ -109,12 +110,25 @@ function draw() {
     textFont(headerFont);
     textSize(70)
     fill(235, 192, 52);
+    noStroke();
     text('Black Lives Matter', (windowWidth/2)-150, 100);
     textSize(30)
     text("Enter your name", 50, 200);
+
     for (let i = 0; i < names.length; i++) {
       names[i].move();
       names[i].display();
       //console.log(names)
     }
+
+    let waveform = fft.waveform();
+    noFill();
+    beginShape();
+    for (let i = 0; i < waveform.length; i++){
+      stroke(235, 192, 52);
+      let x = map(i, 0, waveform.length, 730, 1200);
+      let y = map( waveform[i], -1, 1, 0, 400);
+      vertex(x,y);
+    }
+    endShape();
 }
