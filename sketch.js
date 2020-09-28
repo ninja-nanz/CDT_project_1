@@ -1,116 +1,256 @@
+//=========================================================================
+// DECLARE VARIABLES
+//=========================================================================
 
-let state = 0; // mousePress will increment from Record, to Stop, to Play
+let headerFont, myFont1, myFont2, myFont3, myFont4;
+let timer = 5;
+
 let button;
-//let mic, recorder, soundFile;
-var sum_vol = 0, avg_vol = 0;
-var w = 0;
-var audio = [];
+let protesters = [];
+let buttonRecord;
+let buttonPlay;
+let buttonStop;
+let col1, col2, col3;
+let mic, recorder, soundFile;
+let recordedAudio_ = false;
+let counter = 0;
+var nameBoxInput;
 
-let myFont1, myFont2;
+let mouseXinBox, mouseYinBox;
+let mouseText;
+
+
+
+//=========================================================================
+// SETUP CODE
+//=========================================================================
 
 function preload() {
-  myFont1 = loadFont('/resources/BebasNeue-Regular.ttf');
-  myFont2 = loadFont('/resources/Doctor_Glitch.otf')
+  headerFont = loadFont('/resources/VTCBayard-Regular.ttf');
+  myFont1 = loadFont('/resources/CircularStd-Book.otf');
+  //myFont2 = loadFont('/resources/Courier.dfont');
+  myFont3 = loadFont('/resources/Karla-Bold.ttf');
+  myFont4 = loadFont('/resources/Rubik-Regular.ttf');
 }
 
-
-function setup() {        
+function setup() {
   createCanvas(windowWidth, windowHeight);
   background(59, 59, 59);
-  noStroke();
-  textFont(myFont1);
- 
-  //createA('collective.html', 'collective');
+  col1 = color (196, 0, 0);
+  col2 = color (60,179,113);
+  col3 = color (235, 192, 52);
+  createButtons();
+  createBackground();
+  createGlobalInputs(); // Create soundFile globally
+  
+  
+}
 
-  // create an audio in
-  //mic = new p5.AudioIn();
+function createGlobalInputs() {
+  // Text input
+  nameBoxInput = createInput().attribute('placeholder', 'YOUR NAME');
+  nameBoxInput.position(windowWidth - 450, windowHeight - 65);
 
-  // users must manually enable their browser microphone for recording to work properly!
-  //mic.start();
+  mic = new p5.AudioIn();   // create an audio in
+  mic.start(); // enable browser mic  
+  recorder = new p5.SoundRecorder(); // create a sound recorder
+  recorder.setInput(mic); // connect the mic to the recorder
+  soundFile = new p5.SoundFile(); // create an empty soundFile
+}
 
-  // create a sound recorder
-  //recorder = new p5.SoundRecorder();
+function createButtons() {
+  buttonHey = createImg('./resources/play.png');
+  buttonHey.position(windowWidth - 180, windowHeight - 65);
 
-  // connect the mic to the recorder
-  //recorder.setInput(mic);
+  buttonStop = createImg('./resources/stop.png');
+  //buttonStop.style('background-color', col1);
+  buttonStop.position(windowWidth - 180, windowHeight - 65);
+  buttonStop.mousePressed(stopRecording);
 
-  // create an empty sound file that we will use to playback the recording
-  //soundFile = new p5.SoundFile();
+  buttonRecord = createImg('./resources/record.png');
+  //buttonRecord.style('background-color', col1);
+  buttonRecord.position(windowWidth - 180, windowHeight - 65);
+  buttonRecord.mousePressed(recordAudio);
+
 
   
- 
-  
-}  
+  // buttonPlay = createButton('Play');
+  //buttonPlay.style('background-color', col2);
+  //buttonPlay.position(50, 110);
+  // buttonPlay.mousePressed(playAudio);
 
-function displayText() {
-  textSize(70)
+  button = createButton('Submit');
+  button.position(windowWidth - 100, windowHeight - 50);
+  button.style('background-color', col3);
+  // We pretend global variables nameBoxInput and soundFile
+  // exists
+  button.mousePressed(newProtester)
+}
+
+
+
+function createBackground(){
+  background('#261F1D');
+  textFont(headerFont);
+  textSize(50)
   fill(235, 192, 52);
-  text('Black Lives Matter', 40, 100);
+  noStroke();
+  text('BLACK LIVES MATTER', 50 , windowHeight - 31);
+  //textSize(25)
+  //text("Enter your name", 50, 200);
+  //fill(255, 255, 255, 80);
+  //textSize(20)
+  // text(counter + " voices", width-200, 200);
+  //countdown();
+  //text(timer, windowWidth - 150, windowHeight - 65);
+}
 
-  textSize(30)
-  text('Enable mic and click mouse to begin recording', 40, 180);
-  button = createButton('Add to collective');
-  button.position(40, 200);
-  button.mousePressed(openCollective)
+//=========================================================================
+// TIMER FUNCTION
+//=========================================================================
+
+
+function startTimer() {
+  setTimeout(stopRecording, 5000);
+}
+
+function countdown(){
+  if (frameCount % 60 == 0 && timer > 0) {
+    timer --;
+
+  } 
+  if (timer == 0 ) {
+    text('no');
+  }
+
+}
+
+//=========================================================================
+// AUXILIARY AUDIO FUNCTIONS
+//=========================================================================
+
+function recordAudio() {
+  recorder.record(soundFile);
+  recordedAudio_ = true;
+  buttonRecord.hide();
+ 
+}
+
+function stopRecording() {
+  recorder.stop();
+  buttonStop.hide();
+}
+
+function playAudio() {
+  soundFile.play();
+}
+
+//=========================================================================
+// PROTESTER CLASS
+//=========================================================================
+  
+class Protester {
+  constructor(name, soundFile) {
+    this.x = random(width);
+    this.y = random(100, height - 140);
+    this.speed = random(.5, 2);
+    this.name = name;
+    this.font = random([headerFont]);
+    this.soundFile = soundFile;
+
+    // To add soundwave, timestamp, (maybe speechrecognition)
+  }
+
+  move() {
+    this.x += this.speed;
+    this.y = this.y;
+
+    if (this.x > width) {
+      this.x = 0;
+    }
+  }
+
+  display(mouseX, mouseY) {
+    fill('#261F1D');
+    rect(this.x, this.y-29, 50, 30);
+    fill('#F6C516');
+    textFont(this.font);
+    textSize(40);
+    text(this.name, this.x, this.y);
+    this.mouseOnTop(mouseX, mouseY)
+  }
+
+
+  mouseOnTop(mouseX, mouseY) {
+    mouseXinBox = (this.x - 50 <= mouseX) && (mouseX <= this.x + 50);
+    mouseYinBox = (this.y - 30 <= mouseY) && (mouseY <= this.y + 30);
+    if (mouseXinBox && mouseYinBox) {
+      console.log("hi");
+      mouseOut(this.soundFile.play());
+      this.speed = 0;
+    } else {
+      console.log("yo");
+      this.soundFile.stop();
+      this.speed = random(.5, 2);
+    }
+  }
   
 }
 
+// Operates with global variables nameBoxInput and soundFile
+function newProtester() {
+  if (recordedAudio_ && nameBoxInput.value().length>0) {
+    protesters.push(new Protester(name=nameBoxInput.value().toUpperCase(),
+                                  soundFile=soundFile));
+    counter ++;
+    soundFile = new p5.SoundFile(); // reset soundFile Global
+  }
+  else {
+    if (nameBoxInput.value().length>0){
+      text("Please enter your name")
+    }
+    if (recordedAudio_) {
+      text("Please record your message")
+    }
+  }
 
-function draw() { 
-  //background(59, 59, 59);
-
-  clear();
-  displayText();
-
- 
- 
-  //var vol = mic.getLevel();
-  //sum_vol += vol;
-  //if(frameCount%10==0) {
-  //  avg_vol = map(sum_vol, 0, 5, 0, 200);
-  //  sum_vol = 0;
-  //}
-	//w += 1*(avg_vol-w)+10;
-	//audio.push(w);
-  //ellipse(width*.5, height*.5, w+22, w+22);
-  
-
-
+  buttonRecord.show();
+  buttonStop.show();
+  nameBoxInput.value('');
+  console.log('' +new Date);
 }
 
 
+function mouseOut() {
+  return true;
+}
 
-//function mousePressed() {
-  // use the '.enabled' boolean to make sure user enabled the mic (otherwise we'd record silence)
-  //if (state === 0 && mic.enabled) {
-    // Tell recorder to record to a p5.SoundFile which we will use for playback
-    //recorder.record(soundFile);
+function mouseReleased() {
+  return true;
+}
 
-    //background(220,20,60);
-    //fill(235, 192, 52);
-    //text('Recording now! \nClick to stop.', 40, 180);
-    //state++;
-  //} else if (state === 1) {
-    //recorder.stop(); // stop recorder, and send the result to soundFile
+//=========================================================================
+// DRAW PAGE
+//=========================================================================
 
-    //background(60,179,113);
-    //text('Recording stopped. \nClick to play', 40, 180);
-    //state++;
-  //} else if (state >= 2) {
-    //soundFile.play(); // play the result!
-    //saveSound(soundFile, 'mySound.wav'); // save file
-    //background(59, 59, 59);
-    //text('Playing', 40, 180);
-    //button = createButton('Add to collective');
-    //button.position(40, 200);
-    //button.mousePressed(openCollective)
-    //state++;
-  //}
+function draw() {
+  createBackground();
+  // TODO: Improve background or frame rates
 
-//} 
 
-function openCollective() {
-  window.location.replace("collective.html");
-  console.log('button is working')
+  for (let i = 0; i < protesters.length; i++) {
+    protesters[i].move();
+    protesters[i].display(mouseX, mouseY);
+  }
 
+  //let waveform = fft.waveform();
+  // noFill();
+  // beginShape();
+  // for (let i = 0; i < waveform.length; i++){
+  //   stroke(235, 192, 52);
+  //   let x = map(i, 0, waveform.length, 730, 1200);
+  //   let y = map( waveform[i], -1, 1, 0, 400);
+  //   vertex(x,y);
+  // }
+  // endShape();
 }

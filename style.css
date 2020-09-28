@@ -6,3 +6,50 @@ html, body {
 canvas {
   display: block;
 }
+
+input {
+  background: transparent;
+    border: none;
+    border-bottom: 1px solid #ebc034;
+    color:#ebc034;
+    padding: 5px; 
+    font-size: 30px;
+    text-transform: uppercase;
+    font-family: Bayard;
+    letter-spacing: 0.0425em;
+    width: 230px;
+   
+}
+
+input:focus {
+  outline:none;
+  background-color: black;
+}
+
+@font-face{
+  font-family: "Bayard";
+  src: url("./resources/VTCBayard-Regular.ttf") format("truetype");
+}
+
+img:hover  {
+  background-color: black;
+  cursor: pointer;
+
+}
+
+button {
+  background: transparent;
+    border: none;
+    border-bottom: 1px solid #ebc034;
+
+    padding: 3px 3px 3px 3px; 
+    font-size: 20px;
+    text-transform: uppercase;
+    font-family: Bayard;
+    letter-spacing: 0.0425em;
+    
+}
+
+button:hover {
+  cursor: pointer;
+}
