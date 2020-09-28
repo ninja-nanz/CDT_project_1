@@ -11,8 +11,12 @@ let buttonPlay;
 let buttonStop;
 let col1, col2, col3;
 let mic, recorder, soundFile;
+let recordedAudio_ = false;
 let counter = 0;
-var input;
+var nameBoxInput;
+
+let mouseXinBox, mouseYinBox;
+let mouseText;
 
 //=========================================================================
 // SETUP CODE
@@ -33,6 +37,20 @@ function setup() {
   col2 = color (60,179,113);
   col3 = color (235, 192, 52);
   createButtons();
+  createBackground();
+  createGlobalInputs(); // Create soundFile globally
+}
+
+function createGlobalInputs() {
+  // Text input
+  nameBoxInput = createInput();
+  nameBoxInput.position(50, 220);
+
+  mic = new p5.AudioIn();   // create an audio in
+  mic.start(); // enable browser mic  
+  recorder = new p5.SoundRecorder(); // create a sound recorder
+  recorder.setInput(mic); // connect the mic to the recorder
+  soundFile = new p5.SoundFile(); // create an empty soundFile
 }
 
 function createButtons() {
@@ -51,13 +69,25 @@ function createButtons() {
   buttonPlay.position(50, 110);
   buttonPlay.mousePressed(playAudio);
 
-  input = createInput();
-  input.position(50, 220);
-  
   button = createButton('Submit');
   button.position(50, 250);
   button.style('background-color', col3);
-  button.mousePressed(newProtester);  
+  // We pretend global variables nameBoxInput and soundFile
+  // exists
+  button.mousePressed(newProtester)
+}
+
+function createBackground(){
+  textFont(headerFont);
+  textSize(70)
+  fill(235, 192, 52);
+  noStroke();
+  text('Black Lives Matter', (windowWidth/2)-150, 100);
+  textSize(30)
+  text("Enter your protester", 50, 200);
+  fill(255, 255, 255, 80);
+  textSize(20)
+  // text(counter + " voices", width-200, 200);
 }
 
 //=========================================================================
@@ -65,24 +95,8 @@ function createButtons() {
 //=========================================================================
 
 function recordAudio() {
-  // create an audio in
-  mic = new p5.AudioIn();
-
-  // users must manually enable their browser microphone for recording to work properly!
-  mic.start();
-
-  // create a sound recorder
-  recorder = new p5.SoundRecorder();
-
-  // connect the mic to the recorder
-  recorder.setInput(mic);
-
-  // create an empty sound file that we will use to playback the recording
-  soundFile = new p5.SoundFile();
-
   recorder.record(soundFile);
-  
-  return soundFile;
+  recordedAudio_ = true;
 }
 
 function stopRecording() {
@@ -93,49 +107,64 @@ function playAudio() {
   soundFile.play();
 }
 
-
-function newProtester() {
-  fill(255,255,255);
-  
-  soundFile = 'hola'
-  protesters.push(new Protester(name=input.value(),
-                                soundFile=soundFile));
-  counter ++;
-  //console.log(protesters)
-} 
-
 //=========================================================================
 // PROTESTER CLASS
 //=========================================================================
   
-  class Protester {
-    constructor(name, soundFile) {
-      this.x = random(width);
-      this.y = random(300, height);
-      this.speed = random(.5, 2);
-      this.name = name;
-      this.font = random([myFont1,myFont3,myFont4]);
-      this.soundFile = soundFile;
-      this.name = name+soundFile;
-    }
-  
-    move() {
-      this.x += this.speed;
-      this.y = this.y;
+class Protester {
+  constructor(name, soundFile) {
+    this.x = random(width);
+    this.y = random(300, height);
+    this.speed = random(.5, 2);
+    this.name = name;
+    this.font = random([myFont1,myFont3,myFont4]);
+    this.soundFile = soundFile;
+    // this.button = 
+  }
 
-      if (this.x > width) {
-        this.x = 0;
-      }
+  move() {
+    this.x += this.speed;
+    this.y = this.y;
+
+    if (this.x > width) {
+      this.x = 0;
     }
-  
-    display() {
-      fill(59,59,59);
-      rect(this.x, this.y-29, 150, 30);
-      fill(255, 255, 255, 80);
-      textFont(this.font);
-      textSize(30);
-      text(this.name, this.x, this.y);
+  }
+
+  display(mouseX, mouseY) {
+    rect(this.x, this.y-29, 150, 30);
+    fill(59,59,59);
+    fill(255, 255, 255, 80);
+    textFont(this.font);
+    textSize(30);
+    text(this.name, this.x, this.y);
+    this.mouseOnTop(mouseX, mouseY)
+  }
+
+  mouseOnTop(mouseX, mouseY) {
+    mouseXinBox = (this.x - 150 <= mouseX) && (mouseX <= this.x + 150);
+    mouseYinBox = (this.y - 30 <= mouseY) && (mouseY <= this.y + 30);
+    if (mouseXinBox && mouseYinBox) {
+      this.soundFile.play();
     }
+  }
+}
+
+// Operates with global variables nameBoxInput and soundFile
+function newProtester() {
+  if (recordedAudio_ && nameBoxInput.value().length>0) {
+    protesters.push(new Protester(name=nameBoxInput.value(),
+                                  soundFile=soundFile));
+    counter ++;
+  }
+  else {
+    if (nameBoxInput.value().length>0){
+      text("Please enter your name")
+    }
+    if (recordedAudio_) {
+      text("Please record your message")
+    }
+  }
 }
 
 //=========================================================================
@@ -143,21 +172,22 @@ function newProtester() {
 //=========================================================================
 
 function draw() {
-  //background(59, 59, 59);
-  textFont(headerFont);
-  textSize(70)
-  fill(235, 192, 52);
-  noStroke();
-  text('Black Lives Matter', (windowWidth/2)-150, 100);
-  textSize(30)
-  text("Enter your protester", 50, 200);
-  fill(255, 255, 255, 80);
-  textSize(20)
-  text(counter + " voices", width-200, 200);
+  // text(counter + " voices", width-200, 200);
+  // background(59, 59, 59);
+  frameRate(12);
+  text("X: "+mouseX, 0, height/4);
+  text("Y: "+mouseY, 0, height/2);
+
+  // for (let i = 0; i < protesters.length; i++) {
+  //   protesters[i].move();
+  //   protesters[i].mouseOnTop();
+  //   //console.log(protesters)
+  // }
 
   for (let i = 0; i < protesters.length; i++) {
     protesters[i].move();
-    protesters[i].display();
+    protesters[i].display(mouseX, mouseY);
+    // protesters[i].mouseOnTop(mouseX, mouseY);
     //console.log(protesters)
   }
 
