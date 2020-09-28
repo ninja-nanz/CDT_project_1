@@ -87,7 +87,7 @@ function createBackground(){
   noStroke();
   text('Black Lives Matter', (windowWidth/2)-150, 100);
   textSize(30)
-  text("Enter your protester", 50, 200);
+  text("Enter your name", 50, 200);
   fill(255, 255, 255, 80);
   textSize(20)
   // text(counter + " voices", width-200, 200);
