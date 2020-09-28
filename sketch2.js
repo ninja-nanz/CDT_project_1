@@ -39,6 +39,8 @@ function setup() {
   createButtons();
   createBackground();
   createGlobalInputs(); // Create soundFile globally
+
+  
 }
 
 function createGlobalInputs() {
@@ -120,7 +122,8 @@ class Protester {
     this.name = name;
     this.font = random([myFont1,myFont3,myFont4]);
     this.soundFile = soundFile;
-    // this.button = 
+
+    // To add soundwave, timestamp, (maybe speechrecognition)
   }
 
   move() {
@@ -145,10 +148,15 @@ class Protester {
   mouseOnTop(mouseX, mouseY) {
     mouseXinBox = (this.x - 150 <= mouseX) && (mouseX <= this.x + 150);
     mouseYinBox = (this.y - 30 <= mouseY) && (mouseY <= this.y + 30);
-    if (mouseXinBox && mouseYinBox && mouseReleased()) {
+    if (mouseXinBox && mouseYinBox && mousePressed() == true) {
       this.soundFile.play();
+      this.speed = 0;
+    } else {
+      this.soundFile.pause();
+      
     }
   }
+  
 }
 
 // Operates with global variables nameBoxInput and soundFile
@@ -169,8 +177,13 @@ function newProtester() {
   }
 }
 
+
+function mousePressed() {
+  return true;
+}
+
 function mouseReleased() {
-  return true
+  return true;
 }
 
 //=========================================================================
