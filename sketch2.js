@@ -172,23 +172,12 @@ function newProtester() {
 //=========================================================================
 
 function draw() {
-  // text(counter + " voices", width-200, 200);
-  // background(59, 59, 59);
-  frameRate(12);
-  text("X: "+mouseX, 0, height/4);
-  text("Y: "+mouseY, 0, height/2);
+  // TODO: Improve background or frame rates
 
-  // for (let i = 0; i < protesters.length; i++) {
-  //   protesters[i].move();
-  //   protesters[i].mouseOnTop();
-  //   //console.log(protesters)
-  // }
 
   for (let i = 0; i < protesters.length; i++) {
     protesters[i].move();
     protesters[i].display(mouseX, mouseY);
-    // protesters[i].mouseOnTop(mouseX, mouseY);
-    //console.log(protesters)
   }
 
   // let waveform = fft.waveform();
