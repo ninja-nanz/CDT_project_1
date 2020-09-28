@@ -78,6 +78,7 @@ function createButtons() {
 }
 
 function createBackground(){
+  background(59, 59, 59);
   textFont(headerFont);
   textSize(70)
   fill(235, 192, 52);
@@ -132,8 +133,8 @@ class Protester {
   }
 
   display(mouseX, mouseY) {
-    rect(this.x, this.y-29, 150, 30);
     fill(59,59,59);
+    rect(this.x, this.y-29, 150, 30);
     fill(255, 255, 255, 80);
     textFont(this.font);
     textSize(30);
@@ -144,7 +145,7 @@ class Protester {
   mouseOnTop(mouseX, mouseY) {
     mouseXinBox = (this.x - 150 <= mouseX) && (mouseX <= this.x + 150);
     mouseYinBox = (this.y - 30 <= mouseY) && (mouseY <= this.y + 30);
-    if (mouseXinBox && mouseYinBox) {
+    if (mouseXinBox && mouseYinBox && mouseReleased()) {
       this.soundFile.play();
     }
   }
@@ -156,6 +157,7 @@ function newProtester() {
     protesters.push(new Protester(name=nameBoxInput.value(),
                                   soundFile=soundFile));
     counter ++;
+    soundFile = new p5.SoundFile(); // reset soundFile Global
   }
   else {
     if (nameBoxInput.value().length>0){
@@ -167,11 +169,16 @@ function newProtester() {
   }
 }
 
+function mouseReleased() {
+  return true
+}
+
 //=========================================================================
 // DRAW PAGE
 //=========================================================================
 
 function draw() {
+  createBackground();
   // TODO: Improve background or frame rates
 
 
