@@ -19,7 +19,7 @@ var nameBoxInput;
 let mouseXinBox, mouseYinBox;
 let mouseText;
 
-
+let isHover = false;
 
 //=========================================================================
 // SETUP CODE
@@ -133,12 +133,14 @@ function recordAudio() {
   recorder.record(soundFile);
   recordedAudio_ = true;
   buttonRecord.hide();
- 
+  console.log("recording");
 }
 
 function stopRecording() {
   recorder.stop();
   buttonStop.hide();
+  console.log("soundfile created");
+
 }
 
 function playAudio() {
@@ -184,11 +186,13 @@ class Protester {
   mouseOnTop(mouseX, mouseY) {
     mouseXinBox = (this.x - 50 <= mouseX) && (mouseX <= this.x + 50);
     mouseYinBox = (this.y - 30 <= mouseY) && (mouseY <= this.y + 30);
-    if (mouseXinBox && mouseYinBox) {
+    if (mouseXinBox && mouseYinBox && isHover == false) {
       console.log("hi");
+      isHover = true;
       mouseOut(this.soundFile.play());
       this.speed = 0;
     } else {
+      isHover = false;
       console.log("yo");
       this.soundFile.stop();
       this.speed = random(.5, 2);
