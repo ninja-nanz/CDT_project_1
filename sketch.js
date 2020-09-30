@@ -19,6 +19,7 @@ var nameBoxInput;
 let mouseXinBox, mouseYinBox;
 let mouseText;
 let fft;
+let bg;
 
 //=========================================================================
 // SETUP CODE
@@ -34,6 +35,7 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  bg = loadImage("resources/blm_bg_white.png");
   background(59, 59, 59);
   col1 = color (196, 0, 0);
   col2 = color (60,179,113);
@@ -84,7 +86,7 @@ function createButtons() {
 }
 
 function createBackground(){
-  background('#261F1D');
+  background(bg);
   textFont(headerFont);
   textSize(50)
   fill(235, 192, 52);
@@ -107,13 +109,13 @@ function recordAudio() {
   recorder.record(soundFile);
   recordedAudio_ = true;
   buttonRecord.hide();
-  // console.log("recording");
+  //console.log("recording");
 }
 
 function stopRecording() {
   recorder.stop();
   buttonStop.hide();
-  // console.log("soundfile created");
+  //console.log("soundfile created");
 }
 
 function playAudio() {
