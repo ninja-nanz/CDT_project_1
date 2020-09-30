@@ -109,13 +109,13 @@ function recordAudio() {
   recorder.record(soundFile);
   recordedAudio_ = true;
   buttonRecord.hide();
-  //console.log("recording");
+  console.log("recording");
 }
 
 function stopRecording() {
   recorder.stop();
   buttonStop.hide();
-  //console.log("soundfile created");
+  console.log("soundfile created");
 }
 
 function playAudio() {
