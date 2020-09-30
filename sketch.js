@@ -20,6 +20,8 @@ let mouseXinBox, mouseYinBox;
 let mouseText;
 let fft;
 let bg;
+let bg_alpha;
+
 
 //=========================================================================
 // SETUP CODE
@@ -40,6 +42,7 @@ function setup() {
   col1 = color (196, 0, 0);
   col2 = color (60,179,113);
   col3 = color (235, 192, 52);
+  angleMode(DEGREES);
   createButtons();
   createBackground();
   createGlobalInputs(); // Create soundFile globally
@@ -115,7 +118,7 @@ function recordAudio() {
 function stopRecording() {
   recorder.stop();
   buttonStop.hide();
-  //console.log("soundfile created");
+  console.log("soundfile created");
 }
 
 function playAudio() {
@@ -149,7 +152,7 @@ class Protester {
   }
 
   display(mouseX, mouseY) {
-    fill('#261F1D');
+    noFill();
     rect(this.x, this.y-29, 50, 30);
     fill('#F6C516');
     textFont(this.font);
@@ -224,11 +227,51 @@ function draw() {
 
   let waveform = fft.waveform();
   noFill();
+  translate(windowWidth/2, windowHeight/2);
   beginShape();
-  for (let i = 0; i < waveform.length; i++){
-    stroke(235, 192, 52);
-    let x = map(i, 0, waveform.length, 350, 600); // 50 , windowHeight - 31
-    let y = map( waveform[i], -1, 1, 10, 1875);
+  for (let i = 0; i < 360; i++){
+    stroke(255, 50);
+    //let x = map(i, 0, waveform.length, 350, 600);
+    var r = map(waveform[i], 0, 3, 80, 150);
+    var x = r * cos(i);
+    var y = r * sin(i);
+    //let y = map( waveform[i], -1, 1, 10, 1875);
+    vertex(x,y);
+  }
+  endShape();
+
+  beginShape();
+  for (let i = 0; i < 360; i++){
+    stroke(235, 192, 52, 70);
+    //let x = map(i, 0, waveform.length, 350, 600);
+    var r = map(waveform[i], -1, 1, 100, 200);
+    var x = r * cos(i);
+    var y = r * sin(i);
+    //let y = map( waveform[i], -1, 1, 10, 1875);
+    vertex(x,y);
+  }
+  endShape();
+
+  beginShape();
+  for (let i = 0; i < 360; i++){
+    stroke(235, 192, 52, 80);
+    //let x = map(i, 0, waveform.length, 350, 600);
+    var r = map(waveform[i], -1, 1, 300, 400);
+    var x = r * cos(i);
+    var y = r * sin(i);
+    //let y = map( waveform[i], -1, 1, 10, 1875);
+    vertex(x,y);
+  }
+  endShape();
+
+  beginShape();
+  for (let i = 0; i < 360; i++){
+    stroke(235, 192, 52, 90);
+    //let x = map(i, 0, waveform.length, 350, 600);
+    var r = map(waveform[i], 0, 1, 400, 500);
+    var x = r * cos(i);
+    var y = r * sin(i);
+    //let y = map( waveform[i], -1, 1, 10, 1875);
     vertex(x,y);
   }
   endShape();
