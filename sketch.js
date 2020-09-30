@@ -18,8 +18,7 @@ var nameBoxInput;
 
 let mouseXinBox, mouseYinBox;
 let mouseText;
-
-let isHover = false;
+let fft;
 
 //=========================================================================
 // SETUP CODE
@@ -54,6 +53,7 @@ function createGlobalInputs() {
   recorder = new p5.SoundRecorder(); // create a sound recorder
   recorder.setInput(mic); // connect the mic to the recorder
   soundFile = new p5.SoundFile(); // create an empty soundFile
+  fft = new p5.FFT();
 }
 
 function createButtons() {
@@ -157,7 +157,7 @@ class Protester {
   }
 
   mouseOnTop(mouseX, mouseY) {
-    mouseXinBox = (this.x - 50 <= mouseX) && (mouseX <= this.x + 50);
+    mouseXinBox = (this.x - 50 <= mouseX) && (mouseX <= this.x + 80);
     mouseYinBox = (this.y - 30 <= mouseY) && (mouseY <= this.y + 30);
     if (mouseXinBox && mouseYinBox && this.isBlocked == false) {
       //console.log("hi");
@@ -220,14 +220,14 @@ function draw() {
     protesters[i].display(mouseX, mouseY);
   }
 
-  //let waveform = fft.waveform();
-  // noFill();
-  // beginShape();
-  // for (let i = 0; i < waveform.length; i++){
-  //   stroke(235, 192, 52);
-  //   let x = map(i, 0, waveform.length, 730, 1200);
-  //   let y = map( waveform[i], -1, 1, 0, 400);
-  //   vertex(x,y);
-  // }
-  // endShape();
+  let waveform = fft.waveform();
+  noFill();
+  beginShape();
+  for (let i = 0; i < waveform.length; i++){
+    stroke(235, 192, 52);
+    let x = map(i, 0, waveform.length, 350, 600); // 50 , windowHeight - 31
+    let y = map( waveform[i], -1, 1, 10, 1875);
+    vertex(x,y);
+  }
+  endShape();
 }
