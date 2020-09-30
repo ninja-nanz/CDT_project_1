@@ -164,7 +164,6 @@ class Protester {
       this.isBlocked = true;
       this.count = frameCount;
       this.soundFile.play();
-      text('hola')
       this.speed = 0;
     } 
     if (this.count < frameCount-100 && this.isBlocked==true){
