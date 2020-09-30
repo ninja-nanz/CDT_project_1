@@ -42,8 +42,6 @@ function setup() {
   createButtons();
   createBackground();
   createGlobalInputs(); // Create soundFile globally
-  
-  
 }
 
 function createGlobalInputs() {
@@ -72,11 +70,9 @@ function createButtons() {
   buttonRecord.position(windowWidth - 180, windowHeight - 65);
   buttonRecord.mousePressed(recordAudio);
 
-
-  
   // buttonPlay = createButton('Play');
-  //buttonPlay.style('background-color', col2);
-  //buttonPlay.position(50, 110);
+  // buttonPlay.style('background-color', col2);
+  // buttonPlay.position(50, 110);
   // buttonPlay.mousePressed(playAudio);
 
   button = createButton('Submit');
@@ -86,8 +82,6 @@ function createButtons() {
   // exists
   button.mousePressed(newProtester)
 }
-
-
 
 function createBackground(){
   background('#261F1D');
@@ -106,26 +100,6 @@ function createBackground(){
 }
 
 //=========================================================================
-// TIMER FUNCTION
-//=========================================================================
-
-
-function startTimer() {
-  setTimeout(stopRecording, 5000);
-}
-
-function countdown(){
-  if (frameCount % 60 == 0 && timer > 0) {
-    timer --;
-
-  } 
-  if (timer == 0 ) {
-    text('no');
-  }
-
-}
-
-//=========================================================================
 // AUXILIARY AUDIO FUNCTIONS
 //=========================================================================
 
@@ -133,14 +107,13 @@ function recordAudio() {
   recorder.record(soundFile);
   recordedAudio_ = true;
   buttonRecord.hide();
-  console.log("recording");
+  // console.log("recording");
 }
 
 function stopRecording() {
   recorder.stop();
   buttonStop.hide();
-  console.log("soundfile created");
-
+  // console.log("soundfile created");
 }
 
 function playAudio() {
@@ -159,7 +132,8 @@ class Protester {
     this.name = name;
     this.font = random([headerFont]);
     this.soundFile = soundFile;
-
+    this.isBlocked = false;
+    this.count = 0;
     // To add soundwave, timestamp, (maybe speechrecognition)
   }
 
@@ -182,19 +156,19 @@ class Protester {
     this.mouseOnTop(mouseX, mouseY)
   }
 
-
   mouseOnTop(mouseX, mouseY) {
     mouseXinBox = (this.x - 50 <= mouseX) && (mouseX <= this.x + 50);
     mouseYinBox = (this.y - 30 <= mouseY) && (mouseY <= this.y + 30);
-    if (mouseXinBox && mouseYinBox && isHover == false) {
-      console.log("hi");
-      isHover = true;
-      mouseOut(this.soundFile.play());
+    if (mouseXinBox && mouseYinBox && this.isBlocked == false) {
+      //console.log("hi");
+      this.isBlocked = true;
+      this.count = frameCount;
+      this.soundFile.play();
+      text('hola')
       this.speed = 0;
-    } else {
-      isHover = false;
-      console.log("yo");
-      this.soundFile.stop();
+    } 
+    if (this.count < frameCount-100 && this.isBlocked==true){
+      this.isBlocked = false;
       this.speed = random(.5, 2);
     }
   }
