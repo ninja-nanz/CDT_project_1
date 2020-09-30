@@ -10,6 +10,7 @@ let protesters = [];
 let buttonRecord;
 let buttonPlay;
 let buttonStop;
+let buttonBLM;
 let col1, col2, col3;
 let mic, recorder, soundFile;
 let recordedAudio_ = false;
@@ -21,6 +22,7 @@ let mouseText;
 let fft;
 let bg;
 let bg_alpha;
+let blm_chant;
 
 
 //=========================================================================
@@ -33,6 +35,7 @@ function preload() {
   //myFont2 = loadFont('/resources/Courier.dfont');
   myFont3 = loadFont('/resources/Karla-Bold.ttf');
   myFont4 = loadFont('/resources/Rubik-Regular.ttf');
+  blm_chant = loadSound('resources/blm_chant_crop.mp3');
 }
 
 function setup() {
@@ -86,6 +89,10 @@ function createButtons() {
   // We pretend global variables nameBoxInput and soundFile
   // exists
   button.mousePressed(newProtester)
+
+  buttonBLM = createButton('HEAR');
+  buttonBLM.position(10, windowHeight - 60);
+  buttonBLM.mousePressed(playBLM);
 }
 
 function createBackground(){
@@ -94,7 +101,7 @@ function createBackground(){
   textSize(50)
   fill(235, 192, 52);
   noStroke();
-  text('BLACK LIVES MATTER', 50 , windowHeight - 31);
+  text('BLACK LIVES MATTER', 50, windowHeight - 31);
   //textSize(25)
   //text("Enter your name", 50, 200);
   //fill(255, 255, 255, 80);
@@ -123,6 +130,10 @@ function stopRecording() {
 
 function playAudio() {
   soundFile.play();
+}
+
+function playBLM(){
+  blm_chant.play();
 }
 
 //=========================================================================
