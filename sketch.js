@@ -96,7 +96,7 @@ function createButtons() {
 }
 
 function createBackground(){
-  background(bg);
+  background(80);
   textFont(headerFont);
   textSize(50)
   fill(235, 192, 52);
@@ -241,7 +241,7 @@ function draw() {
   translate(windowWidth/2, windowHeight/2);
   beginShape();
   for (let i = 0; i < 360; i++){
-    stroke(255, 50);
+    stroke(255);
     //let x = map(i, 0, waveform.length, 350, 600);
     var r = map(waveform[i], 0, 3, 80, 150);
     var x = r * cos(i);
@@ -253,7 +253,7 @@ function draw() {
 
   beginShape();
   for (let i = 0; i < 360; i++){
-    stroke(235, 192, 52, 70);
+    stroke(235, 192, 52);
     //let x = map(i, 0, waveform.length, 350, 600);
     var r = map(waveform[i], -1, 1, 100, 200);
     var x = r * cos(i);
@@ -265,7 +265,7 @@ function draw() {
 
   beginShape();
   for (let i = 0; i < 360; i++){
-    stroke(235, 192, 52, 80);
+    stroke(235, 192, 52);
     //let x = map(i, 0, waveform.length, 350, 600);
     var r = map(waveform[i], -1, 1, 300, 400);
     var x = r * cos(i);
@@ -277,7 +277,7 @@ function draw() {
 
   beginShape();
   for (let i = 0; i < 360; i++){
-    stroke(235, 192, 52, 90);
+    stroke(235, 192, 52);
     //let x = map(i, 0, waveform.length, 350, 600);
     var r = map(waveform[i], 0, 1, 400, 500);
     var x = r * cos(i);
