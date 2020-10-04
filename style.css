@@ -26,10 +26,11 @@ input:focus {
   background-color: black;
 }
 
+
 @font-face{
   font-family: "Bayard";
   src: url("./resources/VTCBayard-Regular.ttf") format("truetype");
-}
+
 
 img:hover  {
   background-color: black;

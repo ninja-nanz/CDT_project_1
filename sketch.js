@@ -33,10 +33,10 @@ var database;
 function preload() {
   
   headerFont = loadFont('/resources/VTCBayard-Regular.ttf');
-  myFont1 = loadFont('/resources/CircularStd-Book.otf');
+  myFont1 = loadFont('/resources/VTCBayard-Regular.ttf');
   //myFont2 = loadFont('/resources/Courier.dfont');
-  myFont3 = loadFont('/resources/Karla-Bold.ttf');
-  myFont4 = loadFont('/resources/Rubik-Regular.ttf');
+  myFont3 = loadFont('/resources/VTCBayard-Regular.ttf');
+  myFont4 = loadFont('/resources/VTCBayard-Regular.ttf');
   blm_chant = loadSound('resources/blm_chant_crop.mp3');
 }
 
