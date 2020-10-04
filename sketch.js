@@ -26,6 +26,10 @@ let blm_chant;
 
 var database;
 
+var vid;
+var playing = false;
+var completion;
+var introEnd = false;
 //=========================================================================
 // SETUP CODE
 //=========================================================================
@@ -37,24 +41,33 @@ function preload() {
   //myFont2 = loadFont('/resources/Courier.dfont');
   myFont3 = loadFont('/resources/VTCBayard-Regular.ttf');
   myFont4 = loadFont('/resources/VTCBayard-Regular.ttf');
+  vid = createVideo("/resources/streets.mp4");
+  bg = loadImage("resources/asphalt.jpg");
   blm_chant = loadSound('resources/blm_chant_crop.mp3');
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  bg = loadImage("resources/asphalt.jpg");
+  
   col1 = color (196, 0, 0);
   col2 = color (60,179,113);
   col3 = color (235, 192, 52);
+  
+  vid.size(windowWidth, windowHeight); 
+  vid.position(0,0);
+  //vid.play(); //auto play video on page load
+  
+
   angleMode(DEGREES);
+  //createBackground();
+
   createButtons();
-  createBackground();
   createGlobalInputs(); // Create soundFile globally
 
+  
 
   //FIREBASE
-
-    // Your web app's Firebase configuration
+    // Our web app's Firebase configuration
     var firebaseConfig = {
       apiKey: "AIzaSyC3vnH1MziFfhsd7YfzmPM8ozmguP-9KMQ",
       authDomain: "cdt-project-1.firebaseapp.com",
@@ -89,34 +102,35 @@ function createGlobalInputs() {
 //RECORD BUTTONS
 
 function createButtons() {
-  buttonHey = createImg('./resources/play.png');
-  buttonHey.position(windowWidth - 180, windowHeight - 65);
+  
+    buttonHey = createImg('./resources/play.png');
+    buttonHey.position(windowWidth - 180, windowHeight - 65);
 
-  buttonStop = createImg('./resources/stop.png');
-  //buttonStop.style('background-color', col1);
-  buttonStop.position(windowWidth - 180, windowHeight - 65);
-  buttonStop.mousePressed(stopRecording);
+    buttonStop = createImg('./resources/stop.png');
+    //buttonStop.style('background-color', col1);
+    buttonStop.position(windowWidth - 180, windowHeight - 65);
+    buttonStop.mousePressed(stopRecording);
 
-  buttonRecord = createImg('./resources/record.png');
-  //buttonRecord.style('background-color', col1);
-  buttonRecord.position(windowWidth - 180, windowHeight - 65);
-  buttonRecord.mousePressed(recordAudio);
+    buttonRecord = createImg('./resources/record.png');
+    //buttonRecord.style('background-color', col1);
+    buttonRecord.position(windowWidth - 180, windowHeight - 65);
+    buttonRecord.mousePressed(recordAudio);
 
-  // buttonPlay = createButton('Play');
-  // buttonPlay.style('background-color', col2);
-  // buttonPlay.position(50, 110);
-  // buttonPlay.mousePressed(playAudio);
+    // buttonPlay = createButton('Play');
+    // buttonPlay.style('background-color', col2);
+    // buttonPlay.position(50, 110);
+    // buttonPlay.mousePressed(playAudio);
+    
+    button = createButton('Submit');
+    button.position(windowWidth - 100, windowHeight - 50);
+    button.style('background-color', col3);
+    // We pretend global variables nameBoxInput and soundFile exists
+    button.mousePressed(newProtester)
 
-  button = createButton('Submit');
-  button.position(windowWidth - 100, windowHeight - 50);
-  button.style('background-color', col3);
-  // We pretend global variables nameBoxInput and soundFile
-  // exists
-  button.mousePressed(newProtester)
-
-  buttonBLM = createButton('HEAR');
-  buttonBLM.position(10, windowHeight - 60);
-  buttonBLM.mousePressed(playBLM);
+    //buttonBLM = createButton('HEAR');
+    //buttonBLM.position(10, windowHeight - 60);
+    //buttonBLM.mousePressed(playBLM);
+  
 }
 
 //BACKGROUND 
@@ -127,6 +141,9 @@ function createBackground(){
   fill(235, 192, 52);
   noStroke();
   text('BLACK LIVES MATTER', 50, windowHeight - 31);
+
+
+  
   //textSize(25)
   //text("Enter your name", 50, 200);
   //fill(255, 255, 255, 80);
@@ -157,9 +174,9 @@ function playAudio() {
   soundFile.play();
 }
 
-function playBLM(){
-  blm_chant.play();
-}
+//function playBLM(){
+//  blm_chant.play();
+//}
 
 //=========================================================================
 // PROTESTER CLASS
@@ -169,13 +186,13 @@ class Protester {
   constructor(name, soundFile) {
     this.x = random(width);
     this.y = random(100, height - 140);
+    this.timestamp = new Date;
     this.speed = random(.5, 2);
     this.name = name;
     this.font = random([headerFont]); // swap out with string to test firebase
     this.soundFile = soundFile; // swap out with string to test firebase
     this.isBlocked = false;
     this.count = 0;
-    // To add soundwave, timestamp, (maybe speechrecognition)
   }
 
   move() {
@@ -192,21 +209,38 @@ class Protester {
     rect(this.x, this.y-29, 50, 30);
     fill('#F6C516');
     textFont(this.font);
-    textSize(40);
+    textSize(50);
     text(this.name, this.x, this.y);
     this.mouseOnTop(mouseX, mouseY)
+
+    //show date
+    var dateMe = this.timestamp.getUTCMonth() + '.' + this.timestamp.getUTCDate() + '.' + this.timestamp.getUTCFullYear() 
+    textFont(this.font);
+    textSize(20);
+     text(dateMe, this.x, this.y+20);
+    if (mouseX && mouseY && this.isBlocked == false) {
+      text(dateMe, this.x, this.y+20);
+    } else {
+      text('', this.x, this.y+20);
+    }
+    
+
   }
 
   mouseOnTop(mouseX, mouseY) {
     mouseXinBox = (this.x - 50 <= mouseX) && (mouseX <= this.x + 80);
     mouseYinBox = (this.y - 30 <= mouseY) && (mouseY <= this.y + 30);
+    
+
     if (mouseXinBox && mouseYinBox && this.isBlocked == false) {
-      //console.log("hi");
       this.isBlocked = true;
       this.count = frameCount;
       this.soundFile.play();
       this.speed = 0;
+    
+      
     } 
+
     if (this.count < frameCount-100 && this.isBlocked==true){
       this.isBlocked = false;
       this.speed = random(.5, 2);
@@ -242,7 +276,6 @@ function newProtester() {
   buttonRecord.show();
   buttonStop.show();
   nameBoxInput.value('');
-  console.log('' +new Date);
 }
 
 
@@ -259,8 +292,18 @@ function mouseReleased() {
 //=========================================================================
 
 function draw() {
-  createBackground();
-  // TODO: Improve background or frame rates
+ 
+  
+//Intro VIDEO
+  background(0);
+  
+  completion = vid.time() / vid.duration();
+  if (completion == 1) {
+  vid.hide();
+  createBackground(); // main bg
+   
+}
+
 
 //PROTESTERS MOVING
   for (let i = 0; i < protesters.length; i++) {
@@ -268,7 +311,11 @@ function draw() {
     protesters[i].display(mouseX, mouseY);
   }
 
+
+
+
 //=============WAVEFORM ==========
+/*
   let waveform = fft.waveform();
   noFill();
   translate(windowWidth/2, windowHeight/2);
@@ -285,7 +332,7 @@ function draw() {
   }
   endShape();
 
-  /*
+  
   beginShape();
   for (let i = 0; i < 360; i++){
     stroke(235, 192, 52);
@@ -297,7 +344,7 @@ function draw() {
     vertex(x,y);
   }
   endShape();
-  */
+  
 
   beginShape();
   for (let i = 0; i < 360; i++){
@@ -311,7 +358,8 @@ function draw() {
   }
   endShape();
   
-  /*
+  
+  
   beginShape();
   for (let i = 0; i < 360; i++){
     stroke(235, 192, 52);
@@ -325,4 +373,22 @@ function draw() {
   endShape();
   */
   
+}
+
+
+
+
+
+///PLAY/PAUSE VIDEO - not needed, now loading on load
+
+function mousePressed() {
+  if (!playing) {
+    vid.play();
+    vid.time((mouseX/width) * vid.duration());
+    playing = true;
+  }
+  //else {
+    //vid.pause();
+   // playing = false;
+  //}
 }
