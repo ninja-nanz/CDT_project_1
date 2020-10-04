@@ -24,12 +24,14 @@ let bg;
 let bg_alpha;
 let blm_chant;
 
+var database;
 
 //=========================================================================
 // SETUP CODE
 //=========================================================================
 
 function preload() {
+  
   headerFont = loadFont('/resources/VTCBayard-Regular.ttf');
   myFont1 = loadFont('/resources/CircularStd-Book.otf');
   //myFont2 = loadFont('/resources/Courier.dfont');
@@ -40,8 +42,7 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  bg = loadImage("resources/blm_bg_white.png");
-  background(59, 59, 59);
+  bg = loadImage("resources/asphalt.jpg");
   col1 = color (196, 0, 0);
   col2 = color (60,179,113);
   col3 = color (235, 192, 52);
@@ -49,6 +50,27 @@ function setup() {
   createButtons();
   createBackground();
   createGlobalInputs(); // Create soundFile globally
+
+
+  //FIREBASE
+
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyC3vnH1MziFfhsd7YfzmPM8ozmguP-9KMQ",
+      authDomain: "cdt-project-1.firebaseapp.com",
+      databaseURL: "https://cdt-project-1.firebaseio.com",
+      projectId: "cdt-project-1",
+      storageBucket: "cdt-project-1.appspot.com",
+      messagingSenderId: "655903075193",
+      appId: "1:655903075193:web:564d41f7fe083229f75da8"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    database = firebase.database();
+
+    console.log(firebase);
+    
+    
 }
 
 function createGlobalInputs() {
@@ -63,6 +85,8 @@ function createGlobalInputs() {
   soundFile = new p5.SoundFile(); // create an empty soundFile
   fft = new p5.FFT();
 }
+
+//RECORD BUTTONS
 
 function createButtons() {
   buttonHey = createImg('./resources/play.png');
@@ -95,8 +119,9 @@ function createButtons() {
   buttonBLM.mousePressed(playBLM);
 }
 
+//BACKGROUND 
 function createBackground(){
-  background(80);
+  background(bg);
   textFont(headerFont);
   textSize(50)
   fill(235, 192, 52);
@@ -146,8 +171,8 @@ class Protester {
     this.y = random(100, height - 140);
     this.speed = random(.5, 2);
     this.name = name;
-    this.font = random([headerFont]);
-    this.soundFile = soundFile;
+    this.font = random([headerFont]); // swap out with string to test firebase
+    this.soundFile = soundFile; // swap out with string to test firebase
     this.isBlocked = false;
     this.count = 0;
     // To add soundwave, timestamp, (maybe speechrecognition)
@@ -192,11 +217,18 @@ class Protester {
 
 // Operates with global variables nameBoxInput and soundFile
 function newProtester() {
+  var protestorData = new Protester(name=nameBoxInput.value().toUpperCase(),
+                                    soundFile=soundFile);
+
   if (recordedAudio_ && nameBoxInput.value().length>0) {
-    protesters.push(new Protester(name=nameBoxInput.value().toUpperCase(),
-                                  soundFile=soundFile));
+    protesters.push(protestorData);
     counter ++;
     soundFile = new p5.SoundFile(); // reset soundFile Global
+
+    //PUSH TO FIREBASE
+    var ref = database.ref('protestordata');
+    console.log(protestorData)
+    // ref.push(protestorData); //The functions in the soundFile and font is blocking push to firebase
   }
   else {
     if (nameBoxInput.value().length>0){
@@ -230,18 +262,20 @@ function draw() {
   createBackground();
   // TODO: Improve background or frame rates
 
-
+//PROTESTERS MOVING
   for (let i = 0; i < protesters.length; i++) {
     protesters[i].move();
     protesters[i].display(mouseX, mouseY);
   }
 
+//=============WAVEFORM ==========
   let waveform = fft.waveform();
   noFill();
   translate(windowWidth/2, windowHeight/2);
   beginShape();
   for (let i = 0; i < 360; i++){
     stroke(255);
+    strokeWeight(10);
     //let x = map(i, 0, waveform.length, 350, 600);
     var r = map(waveform[i], 0, 3, 80, 150);
     var x = r * cos(i);
@@ -251,6 +285,7 @@ function draw() {
   }
   endShape();
 
+  /*
   beginShape();
   for (let i = 0; i < 360; i++){
     stroke(235, 192, 52);
@@ -262,6 +297,7 @@ function draw() {
     vertex(x,y);
   }
   endShape();
+  */
 
   beginShape();
   for (let i = 0; i < 360; i++){
@@ -274,7 +310,8 @@ function draw() {
     vertex(x,y);
   }
   endShape();
-
+  
+  /*
   beginShape();
   for (let i = 0; i < 360; i++){
     stroke(235, 192, 52);
@@ -286,4 +323,6 @@ function draw() {
     vertex(x,y);
   }
   endShape();
+  */
+  
 }
