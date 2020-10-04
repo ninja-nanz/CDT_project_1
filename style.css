@@ -15,7 +15,7 @@ input {
     padding: 5px; 
     font-size: 30px;
     text-transform: uppercase;
-    font-family: Bayard;
+   /* font-family: Bayard; */
     letter-spacing: 0.0425em;
     width: 230px;
    
@@ -26,10 +26,11 @@ input:focus {
   background-color: black;
 }
 
+/*
 @font-face{
   font-family: "Bayard";
   src: url("./resources/VTCBayard-Regular.ttf") format("truetype");
-}
+} */
 
 img:hover  {
   background-color: black;
