@@ -11,6 +11,8 @@ let buttonRecord;
 let buttonPlay;
 let buttonStop;
 let buttonBLM;
+let buttonSTN;
+let buttonTakeAction;
 let col1, col2, col3;
 let mic, recorder, soundFile;
 let recordedAudio_ = false;
@@ -42,7 +44,7 @@ function preload() {
   myFont3 = loadFont('/resources/VTCBayard-Regular.ttf');
   myFont4 = loadFont('/resources/VTCBayard-Regular.ttf');
   vid = createVideo("/resources/streets.mp4");
-  bg = loadImage("resources/asphalt.jpg");
+  bg = loadImage("resources/asphalt_texture407.jpg");
   blm_chant = loadSound('resources/blm_chant_crop.mp3');
 }
 
@@ -122,7 +124,7 @@ function createButtons() {
     // buttonPlay.mousePressed(playAudio);
     
     button = createButton('Submit');
-    button.position(windowWidth - 100, windowHeight - 50);
+    button.position(windowWidth - 120, windowHeight - 50);
     button.style('background-color', col3);
     // We pretend global variables nameBoxInput and soundFile exists
     button.mousePressed(newProtester)
@@ -130,6 +132,12 @@ function createButtons() {
     //buttonBLM = createButton('HEAR');
     //buttonBLM.position(10, windowHeight - 60);
     //buttonBLM.mousePressed(playBLM);
+
+    buttonSTN = createButton('SAY THEIR NAMES');
+    buttonSTN.position(50, windowHeight - 60);
+    
+    buttonTakeAction = createButton('TAKE ACTION');
+    buttonTakeAction.position(300, windowHeight - 60);
   
 }
 
@@ -138,9 +146,12 @@ function createBackground(){
   background(bg);
   textFont(headerFont);
   textSize(50)
-  fill(235, 192, 52);
+  fill(255);
   noStroke();
-  text('BLACK LIVES MATTER', 50, windowHeight - 31);
+  text('BLACK LIVES MATTER', 50, 50);
+  textSize(30)
+  text(protesters.length + ' VOICES, ADD YOURS', 700, windowHeight - 31);
+  //text('TAKE ACTION', 200, windowHeight - 50);
 
 
   
@@ -209,7 +220,7 @@ class Protester {
     rect(this.x, this.y-29, 50, 30);
     fill('#F6C516');
     textFont(this.font);
-    textSize(50);
+    textSize(30);
     text(this.name, this.x, this.y);
     this.mouseOnTop(mouseX, mouseY)
 

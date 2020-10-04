@@ -44,7 +44,8 @@ button {
     border-bottom: 1px solid #ebc034;
 
     padding: 3px 3px 3px 3px; 
-    font-size: 20px;
+    color: gray;
+    font-size: 25px;
     text-transform: uppercase;
     font-family: Bayard;
     letter-spacing: 0.0425em;
@@ -54,3 +55,4 @@ button {
 button:hover {
   cursor: pointer;
 }
+
