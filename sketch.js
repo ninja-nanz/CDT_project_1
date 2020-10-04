@@ -197,7 +197,7 @@ class Protester {
 
   move() {
     this.x += this.speed;
-    this.y = this.y;
+    this.y = this.y; // add jiggle W
 
     if (this.x > width) {
       this.x = 0;
