@@ -30,11 +30,11 @@ let blm_chant;
 //=========================================================================
 
 function preload() {
-  headerFont = loadFont('/resources/VTCBayard-Regular.ttf');
-  myFont1 = loadFont('/resources/CircularStd-Book.otf');
-  //myFont2 = loadFont('/resources/Courier.dfont');
-  myFont3 = loadFont('/resources/Karla-Bold.ttf');
-  myFont4 = loadFont('/resources/Rubik-Regular.ttf');
+  headerFont = loadFont('Helvetica') //  loadFont('/resources/VTCBayard-Regular.ttf');
+  myFont1 = loadFont('Helvetica') // loadFont('/resources/CircularStd-Book.otf');
+  //myFont2 = loadFont('Helvetica') // loadFont('/resources/Courier.dfont');
+  myFont3 = loadFont('Helvetica') // loadFont('/resources/Karla-Bold.ttf');
+  myFont4 = loadFont('Helvetica') // loadFont('/resources/Rubik-Regular.ttf');
   blm_chant = loadSound('resources/blm_chant_crop.mp3');
 }
 
