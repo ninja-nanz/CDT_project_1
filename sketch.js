@@ -47,7 +47,7 @@ function preload() {
   myFont3 = loadFont('/resources/VTCBayard-Regular.ttf');
   myFont4 = loadFont('/resources/VTCBayard-Regular.ttf');
   vid = createVideo("/resources/BLM_intro.mp4");
-  bg = loadImage("resources/asphalt_texture407.jpg");
+  bg = loadImage("resources/newbg.jpg");
   blm_chant = loadSound('resources/blm_chant_crop.mp3');
 }
 
@@ -91,14 +91,20 @@ function setup() {
     database = firebase.database();
 
     console.log(firebase);
+
     
     
 }
 
+
+
 function createGlobalInputs() {
   // Text input
   nameBoxInput = createInput().attribute('placeholder', 'YOUR NAME');
-  nameBoxInput.position(windowWidth - 450, windowHeight - 65);
+  nameBoxInput.position(windowWidth - 630, windowHeight - 70);
+
+  placeBoxInput = createInput().attribute('placeholder', 'YOUR REGION');
+  placeBoxInput.position(windowWidth - 430, windowHeight - 70);
 
   mic = new p5.AudioIn();   // create an audio in
   mic.start(); // enable browser mic  
@@ -113,16 +119,16 @@ function createGlobalInputs() {
 function createButtons() {
   
     buttonHey = createImg('./resources/play.png');
-    buttonHey.position(windowWidth - 180, windowHeight - 65);
+    buttonHey.position(windowWidth - 230, windowHeight - 70);
 
     buttonStop = createImg('./resources/stop.png');
     //buttonStop.style('background-color', col1);
-    buttonStop.position(windowWidth - 180, windowHeight - 65);
+    buttonStop.position(windowWidth - 230, windowHeight - 70);
     buttonStop.mousePressed(stopRecording);
 
     buttonRecord = createImg('./resources/record.png');
     //buttonRecord.style('background-color', col1);
-    buttonRecord.position(windowWidth - 180, windowHeight - 65);
+    buttonRecord.position(windowWidth - 230, windowHeight - 70);
     buttonRecord.mousePressed(recordAudio);
 
     // buttonPlay = createButton('Play');
@@ -131,7 +137,7 @@ function createButtons() {
     // buttonPlay.mousePressed(playAudio);
     
     button = createButton('Submit');
-    button.position(windowWidth - 120, windowHeight - 50);
+    button.position(windowWidth - 120, windowHeight - 67);
     button.style('background-color', col3);
     // We pretend global variables nameBoxInput and soundFile exists
     button.mousePressed(newProtester)
@@ -141,10 +147,12 @@ function createButtons() {
     //buttonBLM.mousePressed(playBLM);
 
     buttonSTN = createButton('SAY THEIR NAMES');
-    buttonSTN.position(50, windowHeight - 60);
+    buttonSTN.position(50, windowHeight - 67);
+    buttonSTN.style('background-color', col3);
     
     buttonTakeAction = createButton('TAKE ACTION');
-    buttonTakeAction.position(300, windowHeight - 60);
+    buttonTakeAction.position(230, windowHeight - 67);
+    buttonTakeAction.style('background-color', col3);
   
 }
 
@@ -156,8 +164,8 @@ function createBackground(){
   fill(255);
   noStroke();
   text('BLACK LIVES MATTER', 50, 50);
-  textSize(30)
-  text(protesters.length + ' VOICES, ADD YOURS', (windowWidth/2)-100, windowHeight - 31);
+  textSize(50)
+  text(protesters.length + ' VOICES', (windowWidth/2)-100, windowHeight - 31);
   //text('TAKE ACTION', 200, windowHeight - 50);
 
 
@@ -174,6 +182,9 @@ function createBackground(){
 //=========================================================================
 // AUXILIARY AUDIO FUNCTIONS
 //=========================================================================
+
+
+
 
 function recordAudio() {
   recorder.record(soundFile);
@@ -294,7 +305,7 @@ class RadialArc { // -------------------------   RadialArc Class ---------------
   drawArc() {
     this.dataColor = this.getDataHSBColor(this.dataVal); // get data scaled colour
     stroke(this.dataColor); // set stroke colour
-    strokeWeight(map(this.dataVal,0,1,0,this.maxStroke)); // set stroke weight based on data
+    strokeWeight(map(this.dataVal,0,.5,0,this.maxStroke)); // set stroke weight based on data
     noFill(); // no fill in arc shape
     arc(this.centerX,this.centerY,this.arcRadius,this.arcRadius,this.arcStartRadian,this.arcEndRadian); // draw arc 
     arc(this.centerX,this.centerY,this.arcRadius,this.arcRadius,this.arcStartRadian-PI,this.arcEndRadian-PI); // draw reflected arc
@@ -332,6 +343,7 @@ class Protester {
     this.timestamp = new Date;
     this.speed = random(.5, 2);
     this.name = name;
+    this.place = place;
     this.font = random([headerFont]); // swap out with string to test firebase
     this.soundFile = soundFile; // swap out with string to test firebase
     this.isBlocked = false;
@@ -349,10 +361,11 @@ class Protester {
 
   display(mouseX, mouseY) {
     noFill();
+    noStroke();
     rect(this.x, this.y-30, 80, 30);
     fill('#F6C516');
     textFont(this.font);
-    textSize(30);
+    textSize(50);
     text(this.name, this.x, this.y);
     this.mouseOnTop(mouseX, mouseY)
 
@@ -360,7 +373,8 @@ class Protester {
     var dateMe = this.timestamp.getUTCMonth() + '.' + this.timestamp.getUTCDate() + '.' + this.timestamp.getUTCFullYear() 
     textFont(this.font);
     textSize(20);
-     text(dateMe, this.x, this.y+20);
+     text(dateMe + ' ' + this.place, this.x, this.y+20);
+     // text(this.place, this.x+60, this.y+20);
     if (mouseX && mouseY && this.isBlocked == false) {
       text(dateMe, this.x, this.y+20);
     } else {
@@ -395,7 +409,9 @@ class Protester {
 // Operates with global variables nameBoxInput and soundFile
 function newProtester() {
   var protestorData = new Protester(name=nameBoxInput.value().toUpperCase(),
-                                    soundFile=soundFile);
+                                    soundFile=soundFile,
+                                    place=placeBoxInput.value().toUpperCase()
+                                    ); //place=placeBoxInput.value().toUpperCase(), 
 
   if (recordedAudio_ && nameBoxInput.value().length>0) {
     protesters.push(protestorData);
@@ -419,6 +435,7 @@ function newProtester() {
   buttonRecord.show();
   buttonStop.show();
   nameBoxInput.value('');
+  placeBoxInput.value('');
 }
 
 
@@ -436,6 +453,7 @@ function mouseReleased() {
 
 function draw() {
  
+
   
 //Intro VIDEO
   background(0);
@@ -447,6 +465,7 @@ function draw() {
   analyseSound();
   updateRadialArcs();
   drawRadialArcs();
+
 }
 
 //PROTESTERS MOVING
@@ -516,6 +535,7 @@ function draw() {
   
 }
 
+/*
 function mousePressed() {
   if (!playing) {
     vid.play();
@@ -523,3 +543,4 @@ function mousePressed() {
     playing = true;
   }
 }
+*/
