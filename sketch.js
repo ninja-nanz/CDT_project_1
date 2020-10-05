@@ -46,7 +46,7 @@ function preload() {
   //myFont2 = loadFont('/resources/Courier.dfont');
   myFont3 = loadFont('/resources/VTCBayard-Regular.ttf');
   myFont4 = loadFont('/resources/VTCBayard-Regular.ttf');
-  vid = createVideo("/resources/streets.mp4");
+  vid = createVideo("/resources/BLM_intro.mp4");
   bg = loadImage("resources/asphalt_texture407.jpg");
   blm_chant = loadSound('resources/blm_chant_crop.mp3');
 }
@@ -60,7 +60,7 @@ function setup() {
   
   vid.size(windowWidth, windowHeight); 
   vid.position(0,0);
-  //vid.play(); //auto play video on page load
+  vid.play(); //auto play video on page load
   
 
   angleMode(DEGREES);
