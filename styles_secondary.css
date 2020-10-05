@@ -308,7 +308,7 @@ ol::after {
 li {
 	position: relative;
 	display: inline-block;
-	float: left;
+	float: none;
 	width: 25%;
   	height: 50px;
 }

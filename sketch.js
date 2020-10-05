@@ -49,7 +49,7 @@ function preload() {
   vid = createVideo("/resources/BLM_intro_new.mp4");
   bg = loadImage("resources/newbg.jpg");
   blm_chant = loadSound('resources/blm_chant_crop.mp3');
-  console.log('hi');
+  //console.log('hi');
 }
 
 function setup() {
@@ -430,7 +430,7 @@ function newProtester() {
 
     //PUSH TO FIREBASE
     var ref = database.ref('protestordata');
-    console.log(protestorData)
+    //console.log(protestorData)
     // ref.push(protestorData); //The functions in the soundFile and font is blocking push to firebase
   }
   else {
