@@ -46,7 +46,7 @@ function preload() {
   //myFont2 = loadFont('/resources/Courier.dfont');
   myFont3 = loadFont('/resources/VTCBayard-Regular.ttf');
   myFont4 = loadFont('/resources/VTCBayard-Regular.ttf');
-  vid = createVideo("/resources/BLM_intro.mp4");
+  vid = createVideo("/resources/BLM_intro_new.mp4");
   bg = loadImage("resources/newbg.jpg");
   blm_chant = loadSound('resources/blm_chant_crop.mp3');
   console.log('hi');
