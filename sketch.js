@@ -161,11 +161,11 @@ function createBackground(){
   background(bg);
   textFont(headerFont);
   textSize(50)
-  fill(255);
+  fill('#D7D7D7');
   noStroke();
-  text('BLACK LIVES MATTER', 50, 50);
-  textSize(50)
-  text(protesters.length + ' VOICES', (windowWidth/2)-100, windowHeight - 31);
+  text('BLACK LIVES MATTER', 50, 60);
+  textSize(60)
+  text(protesters.length + ' VOICES', (windowWidth/2)-100, windowHeight - 25);
   //text('TAKE ACTION', 200, windowHeight - 50);
 
 
