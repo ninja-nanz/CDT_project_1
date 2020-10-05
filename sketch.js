@@ -169,7 +169,7 @@ function createBackground(){
   text(protesters.length + ' VOICES', 50, windowHeight - 25);
   textSize(30);
   fill('#D7D7D7');
-  text(' ADD YOUR VOICE.', 190, windowHeight - 25);
+  text(' ADD YOUR VOICE', 200, windowHeight - 25);
   
   //text('TAKE ACTION', 200, windowHeight - 50);
 
@@ -375,7 +375,7 @@ class Protester {
     rect(this.x, this.y-30, 80, 30);
     fill('#ebc034');
     textFont(this.font);
-    textSize(50);
+    textSize(40);
     text(this.name, this.x, this.y);
     this.mouseOnTop(mouseX, mouseY)
 

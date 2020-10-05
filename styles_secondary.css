@@ -57,9 +57,9 @@ body {
     transition: opacity 2s;
 }
 a{
-	text-decoration: none;
+	
 	text-transform: none;
-	color: rgb(0, 0, 0);
+	color: white;
 	font-size: 30px;
 }
 ol, ul {
@@ -171,7 +171,7 @@ h1.name {
 	margin-right: 15px;
 	color: #ebc034;
 	font-weight: 600;
-	width: 100px;
+	width: 90px;
 }
 
 .list-card div {
@@ -182,7 +182,7 @@ h1.name {
 	font-size: 40px;
 	font-weight: 500;
 	color: #D7D7D7;
-	line-height: 26px;
+	line-height: 30px;
 	margin-bottom: 8px;
 }
 
