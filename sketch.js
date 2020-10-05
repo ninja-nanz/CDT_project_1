@@ -46,9 +46,10 @@ function preload() {
   //myFont2 = loadFont('/resources/Courier.dfont');
   myFont3 = loadFont('/resources/VTCBayard-Regular.ttf');
   myFont4 = loadFont('/resources/VTCBayard-Regular.ttf');
-  vid = createVideo("/resources/BLM_intro_new.mp4");
+  vid = createVideo("/resources/BLM_intro.mp4");
   bg = loadImage("resources/newbg.jpg");
   blm_chant = loadSound('resources/blm_chant_crop.mp3');
+  console.log('hi');
 }
 
 function setup() {
@@ -73,6 +74,7 @@ function setup() {
   initRadialArcs();
   initSound();
 
+  
   
 
   //FIREBASE
@@ -145,14 +147,12 @@ function createButtons() {
     //buttonBLM = createButton('HEAR');
     //buttonBLM.position(10, windowHeight - 60);
     //buttonBLM.mousePressed(playBLM);
-
-    buttonSTN = createButton('SAY THEIR NAMES');
-    buttonSTN.position(50, windowHeight - 67);
-    buttonSTN.style('background-color', col3);
     
-    buttonTakeAction = createButton('TAKE ACTION');
-    buttonTakeAction.position(230, windowHeight - 67);
-    buttonTakeAction.style('background-color', col3);
+    buttonSTN = createButton('TAKE ACTION');
+    buttonSTN.position(windowWidth - 160, 20);
+    buttonSTN.style('background-color', col3);
+    buttonSTN.mousePressed(openPage);
+    
   
 }
 
@@ -164,8 +164,13 @@ function createBackground(){
   fill('#D7D7D7');
   noStroke();
   text('BLACK LIVES MATTER', 50, 60);
-  textSize(60)
-  text(protesters.length + ' VOICES', (windowWidth/2)-100, windowHeight - 25);
+  fill('#ebc034');
+  textSize(50);
+  text(protesters.length + ' VOICES', 50, windowHeight - 25);
+  textSize(30);
+  fill('#D7D7D7');
+  text(' ADD YOUR VOICE.', 190, windowHeight - 25);
+  
   //text('TAKE ACTION', 200, windowHeight - 50);
 
 
@@ -178,6 +183,11 @@ function createBackground(){
   //countdown();
   //text(timer, windowWidth - 150, windowHeight - 65);
 }
+
+function openPage() {
+  window.open("/takeaction.html", "_self");  
+}
+
 
 //=========================================================================
 // AUXILIARY AUDIO FUNCTIONS
@@ -363,7 +373,7 @@ class Protester {
     noFill();
     noStroke();
     rect(this.x, this.y-30, 80, 30);
-    fill('#F6C516');
+    fill('#ebc034');
     textFont(this.font);
     textSize(50);
     text(this.name, this.x, this.y);
